@@ -124,7 +124,7 @@ export default {
 				this.locations = this.book.locations
 				console.log(this.locations)
 				this.bookAvailable = true
-				this.setProcess()
+				// this.setProcess()
 				// this.onProgressChange(50)
 			})
 		},
@@ -132,16 +132,18 @@ export default {
 		//翻页功能
 		prevPage(){
 			if(this.rendition && this.bookAvailable){
-				this.rendition.prev();
-				this.setProcess();
+				this.rendition.prev().then(() => {
+					this.setProcess();
+				});				
 			}
 			this.ifTitleAndMenuShow = false;
             this.$refs.MenuBar.hideSetting()
 		},
 		nextPage(){
 			if(this.rendition && this.bookAvailable){
-				this.rendition.next();
-				this.setProcess();
+				this.rendition.next().then(() => {
+					this.setProcess();
+				});
 			}
 			this.ifTitleAndMenuShow = false;
             this.$refs.MenuBar.hideSetting()
@@ -180,10 +182,9 @@ export default {
 			this.rendition.display(location)
 		},
 		jumpTo(href){
-			this.rendition.display(href).then(() =>{
-				this.hideTitleAndMenu()
-			    this.setProcess()
-			})
+			this.rendition.display(href)
+			this.hideTitleAndMenu()
+			// this.setProcess()
 		},
 		setProcess(){
 			let currentLocation = this.rendition.currentLocation()

@@ -155,23 +155,30 @@ export default {
 				console.log(this.navigation)
 				return this.book.locations.generate()
 			}).then(result =>{
-				// console.log(result)
 				this.locations = this.book.locations
+				console.log(this.locations)
 				this.bookAvailable = true
+				this.setProcess()
 				// this.onProgressChange(50)
 			})
 		},
 
 		//翻页功能
 		prevPage(){
-			if(this.rendition){
+			if(this.rendition && this.bookAvailable){
 				this.rendition.prev();
+				this.setProcess();
 			}
+			this.ifTitleAndMenuShow = false;
+            this.$refs.MenuBar.hideSetting()
 		},
 		nextPage(){
-			if(this.rendition){
+			if(this.rendition && this.bookAvailable){
 				this.rendition.next();
+				this.setProcess();
 			}
+			this.ifTitleAndMenuShow = false;
+            this.$refs.MenuBar.hideSetting()
 		},
 		toggleTitleAndMenu(){
 			this.ifTitleAndMenuShow = !this.ifTitleAndMenuShow
@@ -181,7 +188,7 @@ export default {
 		},
 		hideTitleAndMenu(){
 			this.ifTitleAndMenuShow = false
-			this.this.$refs.MenuBar.hideSetting()
+			this.$refs.MenuBar.hideSetting()
 			this.$refs.MenuBar.hideContent()
 		},
 		setFontSize(fontSize){
@@ -207,8 +214,19 @@ export default {
 			this.rendition.display(location)
 		},
 		jumpTo(href){
-			this.rendition.display(href)
-			this.hideTitleAndMenu()
+			this.rendition.display(href).then(() =>{
+				this.hideTitleAndMenu()
+			    this.setProcess()
+			})
+		},
+		setProcess(){
+			let currentLocation = this.rendition.currentLocation()
+		    let currentPage = this.locations.percentageFromCfi(
+		        currentLocation.start.cfi
+		    )
+		    // console.log(Math.round(currentPage * 100))
+		    this.$refs.MenuBar.progress = Math.round(currentPage * 100)
+		    this.$refs.MenuBar.onProgressInput(this.$refs.MenuBar.progress)
 		}
 
 

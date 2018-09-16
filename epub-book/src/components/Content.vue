@@ -47,16 +47,18 @@
 			cursor: pointer;
 			height: px2rem(40);
 			border-bottom: px2rem(1) solid #ccc;
+			padding-left: px2rem(30);
 			.text{
 				flex: 1;
 				font-size: px2rem(12);
-				@include center;
+				
 			}
 		}
 	}
 	.empty{
 		width: 100%;
 	    height: 100%;
+	    font-size: px2rem(14);
 	    @include center;
 	}
 }

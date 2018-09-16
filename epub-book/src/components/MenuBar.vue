@@ -3,7 +3,7 @@
 		<transition name='slide-up'>
 			<div class="menu-wrapper" :class="{'hide-box-shadow':ifSettingShow || !ifTitleAndMenuShow}" v-show='ifTitleAndMenuShow'>
 				<div class="icon-wrapper">
-					<i class="icon iconfont icon-menu" @click="showSetting(3)"></i>
+					<i class="icon iconfont icon-mulu" @click="showSetting(3)"></i>
 				</div>
 				<div class="icon-wrapper">
 					<i class="icon iconfont icon-progress_icon" @click="showSetting(2)"></i>
@@ -21,7 +21,7 @@
 		    	<div class="setting-font-size"
 		    	v-if="showTag === 0"
 		    	>
-		    		<div class="preview" :style="{fontSize:fontSizeList[0].fontSize + 'px'}">A</div>
+		    		<div class="preview" :style="{fontSize:fontSizeList[0].fontSize + 'px',left:lineWidth/2 + 'px'}">A</div>
 		    		<div class="select">
 		    			<div class="select-wrapper"
 			    		v-for="(item,index) in fontSizeList" 
@@ -40,7 +40,7 @@
 			    			<div class="line"></div>
 			    		</div>
 		    		</div>
-		    		<div class="preview" :style="{fontSize:fontSizeList[fontSizeList.length - 1].fontSize + 'px'}">A</div>
+		    		<div class="preview" :style="{fontSize:fontSizeList[fontSizeList.length - 1].fontSize + 'px',left:-lineWidth/2 + 'px'}">A</div>
 		    	</div>
 		    	<div class="setting-theme"
 		    	v-else-if="showTag === 1"
@@ -79,13 +79,6 @@
 		    	</div>
 		    </div>
 	    </transition>
-	    <!-- <content-view
-	    :ifShowContent="ifShowContent"
-	    v-show="ifShowContent"
-	    :navigation="navigation"
-	    :bookAvailable="bookAvailable"
-	    @jumpTo="jumpTo"
-	    ></content-viwe> -->
 	    <ContentView
 	    :ifShowContent="ifShowContent"
 	    v-show="ifShowContent"
@@ -125,7 +118,7 @@
 		},
 		data(){
 			return{
-				ifSettingShow: false,
+				ifSettingShow: true,
 				lineWidth:0,
 				showTag:0,
 				progress:0,
@@ -171,9 +164,8 @@
 
 		},
 		mounted(){
-			// this.ifSettingShow = false			
-			// this.lineWidth = this.$refs.line[0].getBoundingClientRect().width
-			// console.log(this.lineWidth)
+			this.ifSettingShow = false			
+			this.lineWidth = this.$refs.line[0].getBoundingClientRect().width
 		}
 	}
 </script>
@@ -188,7 +180,7 @@
 		width: 100%;
 		height: px2rem(48);
 		z-index: 101;
-		background-color: yellow;
+		background-color: #fff;
 		display: flex;
 		box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0,.15);
 		&.hide-box-shadow{
@@ -262,7 +254,7 @@
 							width: px2rem(20);
 							height: px2rem(20);
 							border-radius: 50%;
-							background-color: red;
+							background-color: #eee;
 							border: px2rem(1) solid #ccc;
 							box-shadow: 0 px2rem(4) px2rem(4) rgba(0, 0, 0,.15);
 							@include center;

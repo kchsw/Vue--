@@ -22,6 +22,7 @@
 		:bookAvailable="bookAvailable"
 		@onProgressChange="onProgressChange"
 		@jumpTo="jumpTo"
+		@setProcess="setProcess"
 		:navigation="navigation"
 		ref="MenuBar"
 		></MenuBar>
@@ -124,7 +125,6 @@ export default {
 				this.locations = this.book.locations
 				console.log(this.locations)
 				this.bookAvailable = true
-				// this.setProcess()
 				// this.onProgressChange(50)
 			})
 		},
@@ -133,7 +133,6 @@ export default {
 		prevPage(){
 			if(this.rendition && this.bookAvailable){
 				this.rendition.prev().then(() => {
-					this.setProcess();
 				});				
 			}
 			this.ifTitleAndMenuShow = false;
@@ -142,7 +141,6 @@ export default {
 		nextPage(){
 			if(this.rendition && this.bookAvailable){
 				this.rendition.next().then(() => {
-					this.setProcess();
 				});
 			}
 			this.ifTitleAndMenuShow = false;
@@ -184,16 +182,18 @@ export default {
 		jumpTo(href){
 			this.rendition.display(href)
 			this.hideTitleAndMenu()
-			// this.setProcess()
 		},
+		//在查看进度条时更新进度条
 		setProcess(){
-			let currentLocation = this.rendition.currentLocation()
-		    let currentPage = this.locations.percentageFromCfi(
-		        currentLocation.start.cfi
-		    )
-		    // console.log(Math.round(currentPage * 100))
-		    this.$refs.MenuBar.progress = Math.round(currentPage * 100)
-		    this.$refs.MenuBar.onProgressInput(this.$refs.MenuBar.progress)
+			if(this.bookAvailable){
+				let currentLocation = this.rendition.currentLocation()
+			    let currentPage = this.locations.percentageFromCfi(
+			        currentLocation.start.cfi
+			    )
+			    // console.log(Math.round(currentPage * 100))
+			    this.$refs.MenuBar.progress = Math.round(currentPage * 100)
+			    this.$refs.MenuBar.onProgressInput(this.$refs.MenuBar.progress)
+			}
 		}
 
 

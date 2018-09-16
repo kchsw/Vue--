@@ -19,7 +19,7 @@
 	    <transition name='slide-up'>
 	    	<div class="setting-wrapper" v-show="ifSettingShow">
 		    	<div class="setting-font-size"
-		    	v-if="showTag === 0"
+		    	v-show="showTag === 0"
 		    	>
 		    		<div class="preview" :style="{fontSize:fontSizeList[0].fontSize + 'px',left:lineWidth/2 + 'px'}">A</div>
 		    		<div class="select">
@@ -43,7 +43,7 @@
 		    		<div class="preview" :style="{fontSize:fontSizeList[fontSizeList.length - 1].fontSize + 'px',left:-lineWidth/2 + 'px'}">A</div>
 		    	</div>
 		    	<div class="setting-theme"
-		    	v-else-if="showTag === 1"
+		    	v-show="showTag === 1"
 		    	>
 		    		<div class="setting-theme-item"
 		    		v-for="(item, index) in themeList"
@@ -59,7 +59,7 @@
 		    		</div>
 		    	</div>
 		    	<div class="setting-progress"
-		    	v-else-if="showTag === 2" 
+		    	v-show="showTag === 2" 
 		    	>
 		    		<div class="progress-wrapper">
 		    			<input class="progress" type="range"
@@ -139,6 +139,9 @@
 			setFontSize(fontSize){
 				this.$emit('setFontSize',fontSize)
 			},
+			setProcess(){
+				this.$emit('setProcess')
+			},
 			showSetting(tag){
 				
 				this.showTag = tag	
@@ -147,6 +150,7 @@
 					this.ifShowContent = true
 				}else{
 					this.ifSettingShow = true
+					this.setProcess()
 				}
 			},
 			hideSetting(){

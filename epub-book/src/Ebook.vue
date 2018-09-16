@@ -1,23 +1,5 @@
 <template>
 	<div class="ebook">
-		<!-- <transition name='slide-down'>
-			<div class="title-wrapper" v-show='ifTitleAndMenuShow'>
-				<div class="left">
-					<i class="icon iconfont icon-Group"></i>
-				</div>
-				<div class="right">
-					<div class="icon-wrapper">
-						<i class="icon iconfont icon-ionc--"></i>
-					</div>
-					<div class="icon-wrapper">
-						<i class="icon iconfont icon-cart"></i>
-					</div>
-					<div class="icon-wrapper">
-						<i class="icon iconfont icon-moreread"></i>
-					</div>
-				</div>
-			</div>
-		</transition> -->
 		<TitleBar 
 		:ifTitleAndMenuShow="ifTitleAndMenuShow"
 		></TitleBar>
@@ -29,22 +11,6 @@
 				<div class="right" @click='nextPage'></div>
 			</div>
 		</div>
-		<!-- <transition name='slide-up'>
-			<div class="menu-wrapper" v-show='ifTitleAndMenuShow'>
-				<div class="icon-wrapper">
-					<i class="icon iconfont icon-menu"></i>
-				</div>
-				<div class="icon-wrapper">
-					<i class="icon iconfont icon-progress_icon"></i>
-				</div>
-				<div class="icon-wrapper">
-					<i class="icon iconfont icon-liangdu"></i>
-				</div>
-				<div class="icon-wrapper">
-					<i class="icon iconfont icon-share1"></i>
-				</div>
-			</div>
-		</transition> -->
 		<MenuBar 
 		:ifTitleAndMenuShow="ifTitleAndMenuShow"
 		:fontSizeList="fontSizeList"

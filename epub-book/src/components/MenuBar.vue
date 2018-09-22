@@ -170,6 +170,7 @@
 		mounted(){
 			this.ifSettingShow = false			
 			this.lineWidth = this.$refs.line[0].getBoundingClientRect().width
+			
 		}
 	}
 </script>

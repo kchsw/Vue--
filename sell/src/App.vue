@@ -53,9 +53,9 @@ export default {
 
 <style lang='scss' scoped>
 @import '@/assets/styles/global.scss';
-#app >>> .border-bottom{
+/*#app >>> .border-bottom{
 	border-color: rgba(7, 17, 27, 0.1);
-}
+}*/
 #app{
 	.tab{
 		display: flex;

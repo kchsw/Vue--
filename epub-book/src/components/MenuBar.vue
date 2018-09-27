@@ -118,7 +118,7 @@
 		},
 		data(){
 			return{
-				ifSettingShow: true,
+				ifSettingShow: false,
 				lineWidth:0,
 				showTag:0,
 				progress:0,
@@ -164,13 +164,14 @@
 			//进度条松开后触发事件，根据进度条的数值跳转到指定位置
 			onProgressChange(progress){
 				this.$emit('onProgressChange',progress)
-			}
-
+			}			
 		},
 		mounted(){
-			this.ifSettingShow = false			
+		},
+		//DOM结构更新 v-show 时
+		updated(){
 			this.lineWidth = this.$refs.line[0].getBoundingClientRect().width
-			
+			console.log(this.$refs.line[0].getBoundingClientRect())
 		}
 	}
 </script>

@@ -5,6 +5,8 @@
 				<li class="menu-item" 
 				v-for="(item,index) of goods" 
 				:key="index"
+				:class="{'current':currentIndex===index}"
+				@click="selectMenu(index)"
 				>
 					<span class="text border-bottom">
 						<span class="icon"
@@ -17,7 +19,7 @@
 		</div>
 		<div class="foods-wrapper" ref="foods">
 			<ul>
-				<li class="food-list food-list-hook"
+				<li class="food-list" ref="foodList"
 				  v-for="(item,index) of goods" 
 				  :key="index"
 				>
@@ -56,7 +58,20 @@ export default{
 	data() {
 		return {
 			goods: [],
-			listHeight: []
+			listHeight: [],
+			scrollY: 0
+		}
+	},
+	computed: {
+		currentIndex(){
+			for (let i = 0; i < this.listHeight.length; i++) {
+	          let height1 = this.listHeight[i];
+	          let height2 = this.listHeight[i + 1];
+	          if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+	            return i;
+	          }
+	        }
+	        return 0;
 		}
 	},
 	methods: {
@@ -69,13 +84,52 @@ export default{
 				const data = res.data
 				this.goods = data.goods
 				console.log(this.goods)
+				this.$nextTick(() => {
+		            this.calculateHeight()
+		            this.initScroll()
+		        })
 			}
+		},
+		calculateHeight(){
+			let foodList = this.$refs.foodList
+			// console.log(foodList[0].clientHeight)
+			let height = 0;
+			this.listHeight.push(height)
+			for (let i = 0; i < foodList.length; i++){
+				let item = foodList[i]
+				height += item.clientHeight;
+				this.listHeight.push(height);
+			}
+		},
+		initScroll(){
+			this.menuScroll = new Bscroll(this.$refs.menu,{
+				click: true
+			})
+		    this.foodsScroll = new Bscroll(this.$refs.foods,{
+		    	probeType: 3
+		    })
+		    this.foodsScroll.on('scroll',(pos) => {
+		    	// console.log(Math.abs(Math.round(pos.y)))
+		    	this.scrollY = Math.abs(Math.round(pos.y))
+		    })
+		},
+		selectMenu(index){
+			let foodList = this.$refs.foodList
+			let el = foodList[index]
+			this.foodsScroll.scrollToElement(el,300)
 		}
     },
 	mounted(){
 	    this.getGoodsData()
-	    this.menuScroll = new Bscroll(this.$refs.menu)
-	    this.foodsScroll = new Bscroll(this.$refs.foods)
+	    // this.menuScroll = new Bscroll(this.$refs.menu)
+	    // this.foodsScroll = new Bscroll(this.$refs.foods,{
+	    // 	probeType: 3
+	    // })
+	    // this.foodsScroll.on('scroll',(pos) => {
+	    // 	// console.log(Math.abs(Math.round(pos.y)))
+	    // 	this.scrollY = Math.abs(Math.round(pos.y))
+	    // 	console.log(this.scrollY)
+	    // })
 	},
 	created(){
 		this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
@@ -104,6 +158,13 @@ export default{
 			width: 56px;
 			line-height: 14px;
 			padding: 0 12px;
+			&.current{
+				position: relative;
+				z-index: 10;
+				margin-top: -1px;
+				background: #fff;
+				font-weight: 700;
+			}
 			.text{
 				display: table-cell;
 				width: 56px;

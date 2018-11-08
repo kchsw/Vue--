@@ -85,7 +85,7 @@ export default{
 	props: {
 		seller: Object
 	},
-	components:{
+	components: {
 		SellStar
 	},
 	data(){

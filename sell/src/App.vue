@@ -15,13 +15,16 @@
     	  to="/seller"
     	>商家</router-link>
     </div>
-    <router-view/>
+    <router-view
+      :seller ="seller"
+    ></router-view>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import SellHeader from "@/components/Header/SellHeader"
+const ERR_OK = 200
 export default {
   name: 'App',
   data() {
@@ -38,7 +41,7 @@ export default {
 			.then(this.getSellDataSuss)
 		},
 		getSellDataSuss(res){
-			if(res.status === 200){
+			if(res.status === ERR_OK){
 				const data = res.data
 				this.seller = data.seller
 				console.log(this.seller)

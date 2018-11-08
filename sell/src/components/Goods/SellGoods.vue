@@ -6,7 +6,7 @@
 				v-for="(item,index) of goods" 
 				:key="index"
 				:class="{'current':currentIndex===index}"
-				@click="selectMenu(index)"
+				@click="selectMenu(index,$event)"
 				>
 					<span class="text border-bottom">
 						<span class="icon"
@@ -41,18 +41,36 @@
 								<div class="price">
 									<span class="now"><span class="rmb">¥</span> {{food.price}}</span><span v-show="food.oldPrice" class="old"><span class="rmb">¥</span> {{food.oldPrice}}</span>
 								</div>
+								<div class="carcontrol-wrapper">
+									<car-control
+									  :food="food"
+									  @add="addFood"
+									></car-control>
+								</div>
 							</div>
 						</li>
 					</ul>					
 				</li>
 			</ul>
 		</div>
+		<shop-cart
+		  :deliveryPrice="seller.deliveryPrice"
+		  :minPrice="seller.minPrice"
+		  :selectFoods="selectFoods"
+		  ref="shopcart"
+		>
+		</shop-cart>
 	</div>
 </template>
 
 <script>
 import axios from 'axios'
 import Bscroll from 'better-scroll'
+import ShopCart from '@/components/ShopCart/ShopCart'
+import CarControl from '@/components/CarControl/CarControl'
+
+
+const ERR_OK = 200;
 export default{
 	name: 'SellGoods',
 	data() {
@@ -61,6 +79,13 @@ export default{
 			listHeight: [],
 			scrollY: 0
 		}
+	},
+	props:{
+		seller: Object
+	},
+	components: {
+		ShopCart,
+		CarControl 
 	},
 	computed: {
 		currentIndex(){
@@ -72,6 +97,17 @@ export default{
 	          }
 	        }
 	        return 0;
+		},
+		selectFoods(){
+			let foods = []
+			this.goods.forEach((good)=>{
+				good.foods.forEach((food)=>{
+					if(food.count){
+						foods.push(food)
+					}
+				})
+			})
+			return foods;
 		}
 	},
 	methods: {
@@ -80,7 +116,7 @@ export default{
 			.then(this.getGoodsDataSuss)
 		},
 		getGoodsDataSuss(res){
-			if(res.status === 200){
+			if(res.status === ERR_OK){
 				const data = res.data
 				this.goods = data.goods
 				console.log(this.goods)
@@ -106,6 +142,7 @@ export default{
 				click: true
 			})
 		    this.foodsScroll = new Bscroll(this.$refs.foods,{
+		    	click: true,
 		    	probeType: 3
 		    })
 		    this.foodsScroll.on('scroll',(pos) => {
@@ -113,10 +150,21 @@ export default{
 		    	this.scrollY = Math.abs(Math.round(pos.y))
 		    })
 		},
-		selectMenu(index){
+		selectMenu(index,event){
+			if(!event._constructed){
+				return
+			}
 			let foodList = this.$refs.foodList
 			let el = foodList[index]
 			this.foodsScroll.scrollToElement(el,300)
+		},
+		addFood(target){
+			this._drop(target);
+		},
+		_drop(target){
+			this.$nextTick(()=>{
+				this.$refs.shopcart.drop(target)
+			})
 		}
     },
 	mounted(){
@@ -224,6 +272,7 @@ export default{
 			}
 			.content{
 				flex: 1;
+				position: relative;
 				.name{
 					margin: 2px 0 8px 0;
 					height: 14px;
@@ -265,6 +314,11 @@ export default{
 						}
 					}
 					
+				}
+				.carcontrol-wrapper{
+					position: absolute;
+					right: 0;
+					bottom: -7px;
 				}
 			}
 		}

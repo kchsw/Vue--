@@ -79,7 +79,7 @@
 		<transition name="fade">
 		    <div class="list-mask"
 		      v-show="listShow"
-		      @click="hideList"
+		      @click.stop.prevent="hideList"
 		    ></div>
 		</transition>
 	</div>

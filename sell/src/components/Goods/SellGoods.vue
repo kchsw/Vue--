@@ -66,6 +66,7 @@
 		<food
 		  :food="selectedFood"
 		  ref="food"
+		  @add="addFood"
 		></food>
 	</div>
 </template>

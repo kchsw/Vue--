@@ -3,7 +3,7 @@
 		<transition name="move">
 			<div class="cart-decrease"
 			  v-show="food.count>0"
-			  @click="decreaseCart"
+			  @click.stop.prevent="decreaseCart"
 			>
 				<i class="inner icon iconfont icon-remove-circle-o"></i>
 			</div>
@@ -12,7 +12,7 @@
 		  v-show="food.count>0"
 		>{{food.count}}</div>
 		<div class="cart-add"
-		  @click="addCart"
+		  @click.stop.prevent="addCart"
 		>
 			<i class="icon iconfont icon-add-circle"></i>
 		</div>

@@ -80,7 +80,7 @@ import Bscroll from 'better-scroll'
 import CarControl from '@/components/CarControl/CarControl'
 import Split from '@/components/Split/Split'
 import RatingSelect from '@/components/RatingSelect/RatingSelect'
-import {formatDate} from '@/common/js/date';
+import {formatDate} from '@/common/js/date'
 import Vue from 'vue'
 
 const POSITIVE = 0;

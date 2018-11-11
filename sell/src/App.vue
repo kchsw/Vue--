@@ -15,21 +15,30 @@
     	  to="/seller"
     	>商家</router-link>
     </div>
-    <router-view
-      :seller ="seller"
-    ></router-view>
+    <keep-alive>
+      <router-view
+        :seller ="seller"
+      ></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import SellHeader from "@/components/Header/SellHeader"
+import { urlParse } from '@/common/js/util';
+
 const ERR_OK = 200
 export default {
   name: 'App',
   data() {
   	return {
-  		seller: {}
+  		seller: {
+        id:(()=>{
+          let queryParam = urlParse();
+          return queryParam.id;
+        })()
+      }
   	}
   },
   components: {
@@ -37,14 +46,13 @@ export default {
   },
   methods: {
   	getSellData(){
-			axios.get('/api/data.json')
+			axios.get('/api/data.json' + '?id=' + this.seller.id)
 			.then(this.getSellDataSuss)
 		},
 		getSellDataSuss(res){
 			if(res.status === ERR_OK){
 				const data = res.data
-				this.seller = data.seller
-				console.log(this.seller)
+				this.seller = Object.assign({},this.seller,data.seller)
 			}
 		}
   },

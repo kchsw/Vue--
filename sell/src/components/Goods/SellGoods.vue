@@ -158,7 +158,9 @@ export default{
 		    })
 		    this.foodsScroll.on('scroll',(pos) => {
 		    	// console.log(Math.abs(Math.round(pos.y)))
-		    	this.scrollY = Math.abs(Math.round(pos.y))
+		    	if(pos.y <= 0){
+		    		this.scrollY = Math.abs(Math.round(pos.y))
+		    	}
 		    })
 		},
 		selectMenu(index,event){

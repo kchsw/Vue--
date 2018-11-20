@@ -1,0 +1,52 @@
+$fontSize: 37.5;
+
+@function px2rem($px) {
+	@return ($px / $fontSize) + rem;
+}
+
+@mixin border-top($color){
+	position: relative;
+		&:after{
+		    display: block;
+		    position: absolute;
+		    left: 0;
+		    top: 0;
+		    width: 100%;
+		    heigth: 0;
+		    border-top: 1px solid $color;
+		    content: '';
+		}
+}
+@mixin border-bottom($color){
+	position: relative;
+		&:after{
+		    display: block;
+		    position: absolute;
+		    right: 0;
+		    bottom: 0;
+		    width: 100%;
+		    heigth: 0;
+		    border-bottom: 1px solid $color;
+		    content: '';
+		}
+}
+
+@border-none(){
+	&:after{
+		display: none;
+	}
+}
+
+@mixin center(){
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@mixin ellipsis(){
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+

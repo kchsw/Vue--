@@ -40,7 +40,8 @@ export default{
 				return
 			}
 			if(!this.food.count){
-				Vue.set(this.food, 'count', 1)
+				Vue.set(this.food, 'count', 1);
+				// this.$set(this.food, 'count', 1)
 			}else{
 				this.food.count++;
 			}

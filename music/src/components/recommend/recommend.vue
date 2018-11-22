@@ -1,24 +1,37 @@
 <template>
 	<div class="recommend">
-		<div class="recommend-content">
-			<div class="slider-wrapper" v-if="recommends.length">
-				<div class="slider-content">
-					<slider ref="slider">
-						<div v-for="item in recommends">
-							<a :href="item.linkUrl">
-								<img :src="item.picUrl">
-							</a>
-						</div>
-					</slider>
-				</div>
-			</div>
-			<div class="recommend-list">
-				<h1 class="list-title">热门歌单推荐</h1>
-				<ul>
-					
-				</ul>
-			</div>
-		</div>
+		<scroll class="recommend-content" :data="discList" ref="scroll">
+            <div>
+    			<div class="slider-wrapper" v-if="recommends.length">
+    				<div class="slider-content">
+    					<slider ref="slider">
+    						<div v-for="item in recommends">
+    							<a :href="item.linkUrl">
+    								<img :src="item.picUrl" @load="loadImage">
+    							</a>
+    						</div>
+    					</slider>
+    				</div>
+    			</div>
+    			<div class="recommend-list">
+    				<h1 class="list-title">热门歌单推荐</h1>
+    				<ul>
+    					<li class="item" v-for="item in discList">
+                            <div class="icon">
+                                <img v-lazy="item.imgurl" width="60" height="60">
+                            </div>
+                            <div class="text">
+                                <h2 class="name" v-html="item.creator.name"></h2>
+                                <p class="desc" v-html="item.dissname"></p>
+                            </div>
+                        </li>
+    				</ul>
+    			</div>
+            </div>
+            <div class="loading-container" v-show="!discList.length">
+                <loading/>
+            </div>
+		</scroll>
 	</div>
 </template>
 
@@ -26,6 +39,8 @@
     import { getRecommend,getDiscList } from 'api/recommend'
     import { ERR_OK } from 'api/config'
     import Slider from 'base/slider/slider'
+    import Scroll from 'base/scroll/scroll'
+    import Loading from 'base/loading/loading'
 
 	export default{
 		name: 'Recommend',
@@ -36,7 +51,9 @@
 			}
 		},
 		components:{
-			Slider
+			Slider,
+            Scroll,
+            Loading
 		},
 		created(){
 			this._getRecommend()
@@ -57,13 +74,21 @@
                     }
                 })
             },
+            loadImage(){
+                if(!this.checkloaded){
+                    this.checkloaded = true
+                    setTimeout(()=>{
+                        this.$refs.scroll.refresh()
+                    },20)
+                }
+            },
 		}
 	}
 </script>
 
 <style lang='stylus' scoped>
-@import '../../common/stylus/variable';
-@import '../../common/stylus/mixin';
+@import '~common/stylus/variable';
+@import '~common/stylus/mixin';
 
 .recommend
     position: fixed

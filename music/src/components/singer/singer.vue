@@ -1,6 +1,6 @@
 <template>
 	<div class="singer">
-		
+		<list-view :data="singers"></list-view>
 	</div>
 </template>
 
@@ -8,6 +8,7 @@
     import { getSingerList } from 'api/singer'
     import { ERR_OK } from 'api/config'
     import Singer from 'common/js/singer'
+    import ListView from 'base/listview/listview'
 
 
     const HOT_SINGER_LEN = 10
@@ -19,6 +20,9 @@
 			return{
 				singers: []
 			}
+		},
+		components:{
+			ListView
 		},
 		created(){
 			this._getSingerList()
@@ -83,5 +87,9 @@
 <style lang='stylus' scoped>
 @import '~common/stylus/variable';
 @import '~common/stylus/mixin';
-
+.singer
+    position: fixed
+    top: 88px
+    bottom: 0
+    width: 100%
 </style>

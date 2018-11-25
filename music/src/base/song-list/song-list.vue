@@ -3,6 +3,7 @@
 		<ul>
 			<li class="item"
 			  v-for="(song, index) in songs"
+			  @click="selectItem(song,index)"
 			>
 				<div class="rank" v-show="rank">
 					<span 
@@ -33,6 +34,9 @@
 			}
 		},
 		methods:{
+			selectItem(item, index){
+				this.$emit('select', item, index)
+			},
 			getRankCls(idx){
 				if(idx <= 2){
 					return `icon icon${idx}`

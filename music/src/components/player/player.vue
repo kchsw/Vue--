@@ -48,9 +48,11 @@
 						<span class="dot"></span>
 					</div>
 					<div class="progress-wrapper">
-						<span class="time time-l"></span>
-						<div class="progress-bar-wrapper"></div>
-						<span class="time time-r"></span>
+						<span class="time time-l">11</span>
+						<div class="progress-bar-wrapper">
+							<progress-bar></progress-bar>
+						</div>
+						<span class="time time-r">22</span>
 					</div>
 					<div class="operators">
 						<div class="icon i-left">
@@ -90,7 +92,12 @@
 					<p class="desc" v-html="currentSong.singer"></p>
 				</div>
 				<div class="control">
-					<i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
+					<progress-circle
+					  :radius="radius"
+					  :percent="percent"
+					>
+					    <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
+					</progress-circle>
 				</div>
 				<div class="control">
 					<i class="icon-playlist"></i>
@@ -105,6 +112,8 @@
     import { prefixStyle } from 'common/js/dom'
     import Scroll from 'base/scroll/scroll'
     import animations from 'create-keyframe-animation'
+    import ProgressBar from 'base/progress-bar/progress-bar'
+    import ProgressCircle from 'base/progress-circle/progress-circle'
 
     const transform = prefixStyle('transform')
     const transitionDuration = prefixStyle('transitionDuration')
@@ -113,11 +122,15 @@
 		name: 'Player',
 		data(){
 			return{
-				songReady: false
+				songReady: false,
+				currentTime: 0,
+				radius: 32
 			}
 		},
 		components:{
-			Scroll
+			Scroll,
+			ProgressBar,
+			ProgressCircle
 		},
 		computed:{
 			...mapGetters([
@@ -137,6 +150,9 @@
 			},
 			disableCls(){
 				return this.songReady ? '' : 'disable'
+			},
+			percent(){
+				return this.currentTime / this.currentSong.duration
 			}
 		},
 		methods:{
@@ -171,6 +187,29 @@
 					index = 0
 				}
 				this.setCurrentIndex(index)
+			},
+			ready(){
+				this.songReady = true
+			},
+			error(){
+				this.songReady = true
+			},
+			updateTime(e){
+				this.currentTime = e.target.currentTime
+			},
+			format(interval){
+				interval = interval | 0
+				const minute = interval / 60 | 0
+				const second =this._pad(interval % 60)
+				return `${minute}:${second}`
+			},
+			_pad(num, n=2){
+				let len = num.toString().length
+				while(len < 2){
+					num = '0' + num
+					len++
+				}
+				return num
 			},
 			...mapMutations({
 				setFullScreen: 'SET_FULL_SCREEN',

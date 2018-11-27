@@ -50,13 +50,18 @@
 					<div class="progress-wrapper">
 						<span class="time time-l">11</span>
 						<div class="progress-bar-wrapper">
-							<progress-bar></progress-bar>
+							<progress-bar
+							  ref="ProgressBar"
+							  :percent="percent"
+							  @percentChange="onProgressBarChange"
+                              @percentChanging="onProgressBarChanging"
+							></progress-bar>
 						</div>
 						<span class="time time-r">22</span>
 					</div>
 					<div class="operators">
-						<div class="icon i-left">
-							<i class="icon-loop"></i>
+						<div class="icon i-left" @click="changeMode">
+							<i :class="iconMode"></i>
 						</div>
 						<div class="icon i-left" :class="disableCls">
 							<i class="icon-prev" @click="prev"></i>
@@ -110,6 +115,8 @@
 <script>
     import { mapGetters, mapMutations } from 'vuex'
     import { prefixStyle } from 'common/js/dom'
+    import { playMode } from 'common/js/config'
+    import {shuffle} from 'common/js/util'
     import Scroll from 'base/scroll/scroll'
     import animations from 'create-keyframe-animation'
     import ProgressBar from 'base/progress-bar/progress-bar'
@@ -137,7 +144,9 @@
 				'fullScreen',
 				'playlist',
 				'currentSong',
-				'playing'
+				'playing',
+				'mode',
+				'sequenceList',
 			]),
 			playIcon(){
 				return this.playing ? 'icon-pause' : 'icon-play'
@@ -153,6 +162,9 @@
 			},
 			percent(){
 				return this.currentTime / this.currentSong.duration
+			},
+			iconMode(){
+				return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
 			}
 		},
 		methods:{
@@ -177,6 +189,9 @@
 					index = this.playlist.length - 1
 				}
 				this.setCurrentIndex(index)
+				if(!this.playing){
+					this.togglePlaying()
+				}
 			},
 			next(){
 				if(!this.songReady){
@@ -187,6 +202,9 @@
 					index = 0
 				}
 				this.setCurrentIndex(index)
+				if(!this.playing){
+					this.togglePlaying()
+				}
 			},
 			ready(){
 				this.songReady = true
@@ -211,10 +229,43 @@
 				}
 				return num
 			},
+			changeMode(){
+				const mode = (this.mode + 1) % 3
+				this.setPlayMode(mode)
+				let list = null
+				if(mode === playMode.random){
+					list = shuffle(this.sequenceList)
+				}else{
+					list = this.sequenceList
+				}
+				this.resetCurrentIndex(list)
+				this.setPlayList(list)
+			},
+			resetCurrentIndex(list){
+
+				let index = list.findIndex((item)=>{
+					return item.id === this.currentSong.id
+				})
+				this.setCurrentIndex(index)
+			},
+			onProgressBarChange(percent){
+				return
+			},
+			onProgressBarChanging(percent){
+				return
+			},
+			end(){
+
+			},
+			loop(){
+
+			},
 			...mapMutations({
 				setFullScreen: 'SET_FULL_SCREEN',
 				setPlayingState: 'SET_PLAYING_STATE',
-				setCurrentIndex: 'SET_CURRENT_INDEX'
+				setCurrentIndex: 'SET_CURRENT_INDEX',
+				setPlayMode: 'SET_PLAY_MODE',
+				setPlayList: 'SET_PLAYLIST'
 			}),
 			_getPosAndScale(){
 				const targetWidth = 40

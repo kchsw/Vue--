@@ -18,7 +18,7 @@
 					<h2 class="subtitle" v-html="currentSong.singer"></h2>
 				</div>
 				<div class="middle">
-					<div class="middle-l">
+					<div class="middle-l" ref="middleL">
 						<div class="cd-wrapper" ref="cdWrapper">
 							<div class="cd">
 								<img class="image"
@@ -31,10 +31,17 @@
 							<div class="playing-lyric"></div>
 						</div>
 					</div>
-					<scroll class="middle-r">
+					<scroll class="middle-r"
+					  ref="lyricList"
+					  :data="currentLyric && currentLyric.lines"
+					>
 						<div class="lyric-wrapper">
-							<div v-if="">
-								<p class="text"></p>
+							<div v-if="currentLyric">
+								<p class="text"
+								  ref="lyricLine"
+								  v-for="(line,index) in currentLyric.lines"
+								  :class="{'current': currentLineNum === index}"
+								>{{line.txt}}</p>
 							</div>
 							<div class="pure-music">
 								<p></p>
@@ -44,8 +51,8 @@
 				</div>
 				<div class="bottom">
 					<div class="dot-wrapper">
-						<span class="dot"></span>
-						<span class="dot"></span>
+						<span class="dot" :class="{'active': currentShow === 'cd'}"></span>
+						<span class="dot" :class="{'active': currentShow === 'lyric'}"></span>
 					</div>
 					<div class="progress-wrapper">
 						<span class="time time-l">11</span>
@@ -121,6 +128,7 @@
     import animations from 'create-keyframe-animation'
     import ProgressBar from 'base/progress-bar/progress-bar'
     import ProgressCircle from 'base/progress-circle/progress-circle'
+    import Lyric from 'lyric-parser'
 
     const transform = prefixStyle('transform')
     const transitionDuration = prefixStyle('transitionDuration')
@@ -131,7 +139,13 @@
 			return{
 				songReady: false,
 				currentTime: 0,
-				radius: 32
+				radius: 32,
+				currentLyric: null,
+		        currentShow: 'cd',
+		        currentLineNum: 0,
+		        playingLyric: '',
+		        isPureMusic: false,
+		        pureMusicLyric: ''
 			}
 		},
 		components:{
@@ -260,6 +274,27 @@
 			loop(){
 
 			},
+			getLyric(){
+				this.currentSong.getLyric().then((lyric)=>{
+					// console.log(lyric)
+					this.currentLyric = new Lyric(lyric,this.handleLyric)
+					console.log(this.currentLyric)
+				}).catch(()=>{
+
+				})
+			},
+			handleLyric({lineNum, txt}){
+				if(!this.$refs.lyricLine){
+					return
+				}
+				if(lineNum > 5){
+					let lineEl = this.$refs.lyricLine[lineNum - 5]
+					this.$refs.lyricLine.scrollToElement(lineEl, 1000)
+				}else{
+					this.$refs.lyricList.ScrollTo(0, 0, 1000)
+				}
+				this.playingLyric = txt
+			},
 			...mapMutations({
 				setFullScreen: 'SET_FULL_SCREEN',
 				setPlayingState: 'SET_PLAYING_STATE',
@@ -326,7 +361,15 @@
 				this.$refs.cdWrapper.style.transition = ''
                 this.$refs.cdWrapper.style[transform] = ''
 			}
-		}
+		},
+		watch:{
+			currentSong(newSong, oldSong){
+				this.getLyric()
+			}
+		},
+		created() {
+	        this.touch = {}
+	    },
 	}
 </script>
 

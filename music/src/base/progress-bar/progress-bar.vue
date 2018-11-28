@@ -22,7 +22,7 @@
 
 	export default{
 		name: 'ProgressBar',
-		peops: {
+		props: {
 			percent: {
 				type: Number,
 				default: 0

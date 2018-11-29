@@ -27,7 +27,8 @@
 							<div class="cd" ref="imageWrapper">
 								<img class="image"
 								  :src="currentSong.image"
-								  :class="cdCls" 
+								  :class="cdCls"
+								  ref="image"
 								>
 							</div>
 						</div>
@@ -96,10 +97,11 @@
 		<transition name="mini">
 			<div class="mini-player" v-show="!fullScreen" @click="open">
 				<div class="icon">
-					<div class="imgWrapper">
+					<div class="imgWrapper" ref="miniWrapper">
 						<img width="40" height="40"
 						  :class="cdCls"  
 						  :src="currentSong.image"
+						  ref="miniImage"
 						>
 					</div>
 				</div>
@@ -122,6 +124,10 @@
 		</transition>
 		<audio
 		  ref="audio"
+		  @playing="ready"
+		  @error="error"
+		  @pause="paused"
+		  @ended='end'
 		  @timeupdate="updateTime"
 		></audio>
 	</div>
@@ -169,6 +175,7 @@
 				'playing',
 				'mode',
 				'sequenceList',
+				'currentIndex',
 			]),
 			playIcon(){
 				return this.playing ? 'icon-pause' : 'icon-play'
@@ -213,7 +220,7 @@
 					this.loop()
 					return
 				}else{
-					let index = setCurrentIndex - 1
+					let index = this.currentIndex - 1
 					if(index === -1){
 						index = this.playlist.length - 1
 					}
@@ -232,7 +239,7 @@
 					this.loop()
 					return
 				}else{
-					let index = setCurrentIndex + 1
+					let index = this.currentIndex + 1
 					if(index === this.playlist.length){
 						index = 0
 					}
@@ -245,13 +252,36 @@
 			ready(){
 				clearTimeout(this.timer)
 				this.songReady = true
+				this.canLyricPlay = true
+				if(this.currentLyric){
+					this.currentLyric.seek(this.currentTime * 1000)
+				}
 			},
 			error(){
 				clearTimeout(this.timer)
 				this.songReady = true
 			},
 			paused(){
-
+				this.setPlayingState(false)
+				if(this.currentLyric){
+					this.currentLyric.stop()
+				}
+			},
+			end(){
+				this.currentTime = 0
+				if(this.mode === playMode.loop){
+					this.loop()
+				}else{
+					this.next()
+				}
+			},
+			loop(){
+				this.$refs.audio.currentTime = 0
+				this.$refs.audio.play()
+				this.setPlayingState(true)
+				if(this.currentLyric){
+					this.currentLyric.seek(0)
+				}
 			},
 			updateTime(e){
 				this.currentTime = e.target.currentTime
@@ -295,26 +325,22 @@
 				if(this.currentLyric){
 					this.currentLyric.seek(this.currentTime * 1000)
 				}
+				if(!this.playing){
+					this.togglePlaying()
+				}
 			},
 			onProgressBarChanging(percent){
 				const currentTime = this.currentSong.duration * percent
 				if(this.currentLyric){
 					this.currentLyric.seek(this.currentTime * 1000)
 				}
-				if(!this.playing){
-					this.togglePlaying()
-				}
-			},
-			end(){
-
-			},
-			loop(){
-
+				
 			},
 			getLyric(){
 				this.currentSong.getLyric().then((lyric)=>{
 					this.currentLyric = new Lyric(lyric,this.handleLyric)
-					if(this.playing){
+					this.isPureMusic = !this.currentLyric.lines.length
+					if(this.playing && this.canLyricPlay){
                         this.currentLyric.seek(this.currentTime * 1000)
 					}
 				}).catch(()=>{
@@ -464,6 +490,16 @@
 				this.$refs.middleL.style[transitionDuration] = `${time}ms`
 				this.touch.initiated = false
 			},
+			syncWrapperTransform(wrapper, inner){
+				if(!this.$refs[wrapper]){
+					return
+				}
+				let imageWrapper = this.$refs[wrapper]
+				let image = this.$refs[inner]
+				let wTransform = getComputedStyle(imageWrapper)[transform]
+				let iTransform = getComputedStyle(image)[transform]
+				imageWrapper.style[transform] = wTransform === 'none' ? iTransform : iTransform.concat(' ', wTransform)
+			}
 		},
 		watch:{
 			currentSong(newSong, oldSong){
@@ -495,6 +531,13 @@
 				this.$nextTick(() => {
 		            newPlaying ? audio.play() : audio.pause()
 		        })
+		        if(!newPlaying){
+		        	if(this.fullScreen){
+		        		this.syncWrapperTransform('imageWrapper', 'image')
+		        	}else{
+		        		this.syncWrapperTransform('miniWrapper', 'miniImage')
+		        	}
+		        }
 			}
 		},
 		created() {
@@ -588,6 +631,8 @@
                 border: 10px solid rgba(255, 255, 255, 0.1)
               .play
                 animation: rotate 20s linear infinite
+              .pause
+                animation-play-state: paused
           .playing-lyric-wrapper
             width: 80%
             margin: 30px auto 0 auto

@@ -14,6 +14,7 @@
 	import { ERR_OK } from 'api/config'
 	import { mapGetters } from 'vuex'
 	import { createSong, isValidMusic, processSongsUrl } from 'common/js/song'
+	import axios from 'axios'
 
 	export default{
 		name: 'Disc',
@@ -35,6 +36,34 @@
 		},
 		components:{
 			MusicList	
+		},
+		methods:{
+			_getSongList(){
+				if(!this.disc.dissid){
+					this.$router.push('/recommend')
+					return
+				}
+				getSongList(this.disc.dissid).then((res)=>{
+	    			if(res.code === ERR_OK){
+	    				processSongsUrl(this._normalizeSongs(res.cdlist[0].songlist)).then((songs)=>{
+	    					this.songs = songs
+	    				})
+	    			}
+	    		})
+			},
+			_normalizeSongs(list){
+	    		let ret = []
+	    		list.forEach((musicData)=>{
+	    			if(isValidMusic(musicData)){
+	    				ret.push(createSong(musicData))
+	    			}
+	    		})
+	    		return ret
+
+	    	}
+		},
+		created(){
+			this._getSongList()
 		}
 	}
 </script>

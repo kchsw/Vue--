@@ -6,6 +6,9 @@
 
 <script>
 	import BScroll from 'better-scroll'
+	const DIRECTION_H = 'horizontal'
+    const DIRECTION_V = 'vertical'
+
 	export default{
 		name: 'Scroll',
 		props:{
@@ -24,6 +27,22 @@
 			listenScroll:{
 				type: Boolean,
 				default: false
+			},
+			pullup:{
+				type: Boolean,
+				default: false
+			},
+			refreshDelay: {
+				type: Number,
+				default: 20
+			},
+			beforeScroll:{
+				type: Boolean,
+				default: false
+			},
+			direction:{
+				type: String,
+				default: DIRECTION_V
 			}
 		},
 		mounted(){
@@ -38,11 +57,25 @@
 				}
 				this.scroll = new BScroll(this.$refs.wrapper,{
 					probeType: this.probeType,
-					click: this.click
+					click: this.click,
+					eventPassthrough: this.direction === DIRECTION_V ? DIRECTION_H : DIRECTION_V
 				})
 				if(this.listenScroll){
 					this.scroll.on('scroll',(pos)=>{
 						this.$emit('scroll',pos)
+					})
+				}
+				if(this.pullup){
+					this.scroll.on('scrollEnd', ()=>{
+						//快滚到底了  maxScrollY 、scroll.y 是负值
+						if(this.scroll.y <= (this.scroll.maxScrollY + 50)){
+							this.$emit('scrollToEnd')
+						}
+					})
+				}
+				if(this.beforeScroll){
+					this.scroll.on('beforeScrollStart', ()=>{						
+						this.$emit('beforeScroll')
 					})
 				}
 			},
@@ -55,6 +88,12 @@
 			scrollToElement(){
 				this.scroll && this.scroll.scrollToElement.apply(this.scroll,arguments)
 			},
+			disable(){
+				this.scroll && this.scroll.disable()
+			},
+			enable(){
+				this.scroll && this.scroll.enable()
+			}
 		},
 		watch:{
 			data(){

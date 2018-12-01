@@ -34,6 +34,23 @@ module.exports = {
 					console.log(e)
 				})
 			})
+
+
+			app.get('/api/getSearch',function(req,res){
+				const url = 'http://ustbhuangyi.com/music/api/search'
+
+				axios.get(url, {
+					    headers: {
+					    	referer: 'http://ustbhuangyi.com/music/',
+                            host: 'ustbhuangyi.com'	            	
+					    },
+				        params: req.query
+				}).then((response) => {
+					res.json(response.data)
+				}).catch((e) => {
+					console.log(e)
+				})
+			})
             
             app.get('/api/getCdInfo', function (req, res) {
 		        const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'

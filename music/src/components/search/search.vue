@@ -10,7 +10,7 @@
 		  ref="shortcutWrapper"
 		  v-show="!query"
 		>
-		    <div class="shortcut"
+		    <scroll class="shortcut"
 		      ref="shortcut"
 		    >
 		        <div>
@@ -34,26 +34,33 @@
 		        		</h1>
 		        	</div>
 		        </div>	
-		    </div>
+		    </scroll>
 		</div>
 		<div class="search-result"
 		  ref="searchResult"
 		  v-show="query"
 		>
-			
+			<Suggest 
+			  :query="query"
+			  ref="suggest"
+			  @listScroll="bulrInput"
+			></Suggest>
 		</div>
+		<router-view></router-view>
 	</div>
 </template>
 
 <script>
     import SearchBox from 'base/search-box/search-box'
     import Scroll from 'base/scroll/scroll'
+    import Suggest from 'components/suggest/suggest'
     import { getHotKey } from 'api/search'
     import { ERR_OK } from 'api/config'
     import { playlistMixin } from 'common/js/mixin'
     import { mapActions } from 'vuex'
 
 	export default{
+		mixins: [playlistMixin],
 		name: 'Search',
 		data(){
 			return{
@@ -64,9 +71,19 @@
 		},
 		components:{
 			SearchBox,
-			Scroll
+			Scroll,
+			Suggest
 		},
 		methods:{
+			handlePlaylist(playlist) {
+				const bottom = playlist.length > 0 ? '60px' : ''
+				this.$refs.searchResult.style.bottom = bottom
+				this.$refs.suggest.refresh()
+
+				this.$refs.shortcutWrapper.style.bottom = bottom
+				this.$refs.shortcut.refresh()
+
+			},
 			_getHotKey(){
 				getHotKey().then((res)=>{
 					if(res.code === ERR_OK){
@@ -81,6 +98,9 @@
 			
 			onQuertChange(query){
 				this.query = query.trim()
+			},
+			bulrInput(){
+				this.$refs.searchBox.bulr()
 			}
 		},
 		created(){

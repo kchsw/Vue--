@@ -21,8 +21,8 @@
 			</li>
 			<loading v-show='hasMore' title=""></loading>
 		</ul>
-		<div class="no-result-wrapper">
-		
+		<div class="no-result-wrapper" v-show="!result.length && !hasMore">
+			<no-result title="抱歉，暂无搜索结果"></no-result>
 	    </div>
 	</scroll>
 	
@@ -32,6 +32,7 @@
     import Scroll from 'base/scroll/scroll'
     import Loading from 'base/loading/loading'
     import Singer from 'common/js/singer'
+    import NoResult from 'base/no-result/no-result'
     import { search } from 'api/search'
 	import { ERR_OK } from 'api/config'
 	import { createSong, isValidMusic, processSongsUrl } from 'common/js/song'
@@ -63,7 +64,8 @@
 		},
 		components:{
 			Scroll,
-			Loading
+			Loading,
+			NoResult
 		},
 		methods: {
 			selectItem(item){
@@ -76,7 +78,10 @@
 						path: `/search/${singer.id}`
 					})
 					this.setSinger(singer)
+				}else{
+					this.insertSong(item)
 				}
+				this.$emit('select',item)
 			},
 			refresh() {
 		        this.$refs.suggest.refresh()
@@ -153,7 +158,11 @@
 			},
 			...mapMutations({
 		        setSinger: 'SET_SINGER'
+
 		    }),
+		    ...mapActions([
+		        'insertSong'
+		    ])
 			
 		},
 		watch: {

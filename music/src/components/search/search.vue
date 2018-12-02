@@ -44,6 +44,7 @@
 			  :query="query"
 			  ref="suggest"
 			  @listScroll="bulrInput"
+			  @select="saveSearch"
 			></Suggest>
 		</div>
 		<router-view></router-view>
@@ -101,7 +102,15 @@
 			},
 			bulrInput(){
 				this.$refs.searchBox.bulr()
-			}
+			},
+			saveSearch(){
+
+			},
+			...mapActions([
+		        'saveSearchHistory',
+		        'deleteSearchHistory',
+		        'clearSearchHistory'
+		    ])
 		},
 		created(){
 			this._getHotKey()

@@ -19,7 +19,7 @@
 					<p class="text" v-html="getDisplayName(item)"></p>
 				</div>
 			</li>
-			<loading v-show='hasMore' title=""></loading>
+			<loading v-show='hasMore' title="搜索中.."></loading>
 		</ul>
 		<div class="no-result-wrapper" v-show="!result.length && !hasMore">
 			<no-result title="抱歉，暂无搜索结果"></no-result>
@@ -171,6 +171,7 @@
 					return
 				}
 				this.search(newQuery)
+				this.result = []
 			}
 		}
 

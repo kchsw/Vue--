@@ -91,6 +91,7 @@ export const deleteSong = function({commit, state}, song){
     playlist.splice(pIndex, 1)
     let sIndex = findIndex(sequenceList, song)
     sequenceList.splice(sIndex, 1)
+                                 //最后一首歌的情况
     if(currentIndex > pIndex || currentIndex === playlist.length) {
         currentIndex--
     }
@@ -110,4 +111,16 @@ export const deleteSongList = function({commit}){
     commit(types.SET_PLAYLIST, [])
     commit(types.SET_SEQUENCE_LIST, [])
     commit(types.SET_PLAYING_STATE, false)
+}
+
+export const savePlayHistory = function ({commit}, song) {
+    commit(types.SET_PLAY_HISTORY, savePlay(song))
+}
+
+export const saveFavoriteList = function ({commit}, song) {
+    commit(types.SET_FAVORITE_LIST, saveFavorite(song))
+}
+
+export const deleteFavoriteList = function ({commit}, song) {
+    commit(types.SET_FAVORITE_LIST, deleteFavorite(song))
 }

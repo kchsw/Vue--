@@ -13,6 +13,7 @@
 		    <scroll class="shortcut"
 		      ref="shortcut"
 		      :data="shortcut"
+		      :refreshDelay="refreshDelay"
 		    >
 		        <div>
 		        	<div class="hot-key">
@@ -71,17 +72,15 @@
     import Confirm from 'base/confirm/confirm'
     import { getHotKey } from 'api/search'
     import { ERR_OK } from 'api/config'
-    import { playlistMixin } from 'common/js/mixin'
+    import { playlistMixin, searchMixin } from 'common/js/mixin'
     import { mapActions,mapGetters } from 'vuex'
 
 	export default{
-		mixins: [playlistMixin],
+		mixins: [playlistMixin, searchMixin],
 		name: 'Search',
 		data(){
 			return{
 				hotKey: [],
-				query: '',
-				refreshDelay: 120
 			}
 		},
 		components:{
@@ -94,10 +93,7 @@
 		computed: {
 			shortcut(){
 				return this.hotKey.concat(this.searchHistory)
-			},
-		    ...mapGetters([
-		      'searchHistory'
-		    ])
+			}
 		},
 		methods:{
 			handlePlaylist(playlist){
@@ -133,8 +129,6 @@
 				this.$refs.confirm.show()
 			},
 			...mapActions([
-		        'saveSearchHistory',
-		        'deleteSearchHistory',
 		        'clearSearchHistory'
 		    ])
 		},

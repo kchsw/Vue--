@@ -135,10 +135,11 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex'
+    import { mapGetters, mapMutations, mapActions } from 'vuex'
     import { prefixStyle } from 'common/js/dom'
     import { playMode } from 'common/js/config'
     import {shuffle} from 'common/js/util'
+    import { playerMixin } from 'common/js/mixin'
     import Scroll from 'base/scroll/scroll'
     import animations from 'create-keyframe-animation'
     import ProgressBar from 'base/progress-bar/progress-bar'
@@ -259,6 +260,7 @@
 				clearTimeout(this.timer)
 				this.songReady = true
 				this.canLyricPlay = true
+				this.savePlayHistory(this.currentSong)
 				if(this.currentLyric){
 					this.currentLyric.seek(this.currentTime * 1000)
 				}
@@ -368,13 +370,6 @@
 				}
 				this.playingLyric = txt
 			},
-			...mapMutations({
-				setFullScreen: 'SET_FULL_SCREEN',
-				setPlayingState: 'SET_PLAYING_STATE',
-				setCurrentIndex: 'SET_CURRENT_INDEX',
-				setPlayMode: 'SET_PLAY_MODE',
-				setPlayList: 'SET_PLAYLIST'
-			}),
 			_getPosAndScale(){
 				const targetWidth = 40
 				const paddingLeft = 40
@@ -505,10 +500,21 @@
 				let wTransform = getComputedStyle(imageWrapper)[transform]
 				let iTransform = getComputedStyle(image)[transform]
 				imageWrapper.style[transform] = wTransform === 'none' ? iTransform : iTransform.concat(' ', wTransform)
-			}
+			},
+			...mapActions([
+		        'savePlayHistory'
+		    ]),
+		    ...mapMutations({
+				setFullScreen: 'SET_FULL_SCREEN',
+				setPlayingState: 'SET_PLAYING_STATE',
+				setCurrentIndex: 'SET_CURRENT_INDEX',
+				setPlayMode: 'SET_PLAY_MODE',
+				setPlayList: 'SET_PLAYLIST'
+			})
 		},
 		watch:{
 			currentSong(newSong, oldSong){
+				//当playlist删除完，newSong返回undefind 会报错
 				if(!newSong.id || !newSong.url || newSong.id === oldSong.id){
 					return
 				}

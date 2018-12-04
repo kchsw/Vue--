@@ -1,3 +1,5 @@
+import Song from 'common/js/song'
+
 export const singer = state => state.singer
 
 export const playing = state => state.playing
@@ -22,5 +24,16 @@ export const topList = state => state.topList
 
 export const searchHistory = state => state.searchHistory
 
-export const playHistory = state => state.playHistory
+export const playHistory = (state) => {
+	return state.playHistory.map((song)=>{
+		return new Song(song)
+	})
+	//从localStorage存储到读取的过程中song已经不是Song的实例
+}
 
+export const favoriteList = (state) => {
+	return state.favoriteList.map((song)=>{
+		return new Song(song)
+	})
+	//从localStorage存储到读取的过程中song已经不是Song的实例
+}

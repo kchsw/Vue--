@@ -88,7 +88,10 @@
 							<i class="icon-next" @click="next"></i>
 						</div>
 						<div class="icon i-right">
-							<i class="icon-not-favorite"></i>
+							<i class="icon"
+							  :class="favoriteIcon"
+							  @click="toggleFavorite(currentSong)"
+							></i>
 						</div>
 					</div>
 				</div>
@@ -138,7 +141,7 @@
     import { mapGetters, mapMutations, mapActions } from 'vuex'
     import { prefixStyle } from 'common/js/dom'
     import { playMode } from 'common/js/config'
-    import {shuffle} from 'common/js/util'
+    import { shuffle } from 'common/js/util'
     import { playerMixin } from 'common/js/mixin'
     import Scroll from 'base/scroll/scroll'
     import animations from 'create-keyframe-animation'
@@ -151,6 +154,7 @@
     const transitionDuration = prefixStyle('transitionDuration')
 
 	export default{
+		mixins: [playerMixin],
 		name: 'Player',
 		data(){
 			return{
@@ -174,11 +178,7 @@
 		computed:{
 			...mapGetters([
 				'fullScreen',
-				'playlist',
-				'currentSong',
 				'playing',
-				'mode',
-				'sequenceList',
 				'currentIndex',
 			]),
 			playIcon(){
@@ -196,9 +196,6 @@
 			percent(){
 				return this.currentTime / this.currentSong.duration
 			},
-			iconMode(){
-				return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
-			}
 		},
 		methods:{
 			showPlaylist(){
@@ -307,25 +304,6 @@
 					len++
 				}
 				return num
-			},
-			changeMode(){
-				const mode = (this.mode + 1) % 3
-				this.setPlayMode(mode)
-				let list = null
-				if(mode === playMode.random){
-					list = shuffle(this.sequenceList)
-				}else{
-					list = this.sequenceList
-				}
-				this.resetCurrentIndex(list)
-				this.setPlayList(list)
-			},
-			resetCurrentIndex(list){
-
-				let index = list.findIndex((item)=>{
-					return item.id === this.currentSong.id
-				})
-				this.setCurrentIndex(index)
 			},
 			onProgressBarChange(percent){
 				const currentTime = this.currentSong.duration * percent
@@ -506,10 +484,6 @@
 		    ]),
 		    ...mapMutations({
 				setFullScreen: 'SET_FULL_SCREEN',
-				setPlayingState: 'SET_PLAYING_STATE',
-				setCurrentIndex: 'SET_CURRENT_INDEX',
-				setPlayMode: 'SET_PLAY_MODE',
-				setPlayList: 'SET_PLAYLIST'
 			})
 		},
 		watch:{

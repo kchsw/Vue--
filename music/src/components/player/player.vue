@@ -48,8 +48,8 @@
 								  :class="{'current': currentLineNum === index}"
 								>{{line.txt}}</p>
 							</div>
-							<div class="pure-music">
-								<p></p>
+							<div class="pure-music" v-show="isPureMusic">
+								<p>{{pureMusicLyric}}</p>
 							</div>
 						</div>
 					</scroll>
@@ -63,7 +63,7 @@
 						<span class="time time-l">{{format(currentTime)}}</span>
 						<div class="progress-bar-wrapper">
 							<progress-bar
-							  ref="ProgressBar"
+							  ref="progressBar"
 							  :percent="percent"
 							  @percentChange="onProgressBarChange"
                               @percentChanging="onProgressBarChanging"
@@ -152,6 +152,7 @@
 
     const transform = prefixStyle('transform')
     const transitionDuration = prefixStyle('transitionDuration')
+    const timeExp = /\[(\d{2}):(\d{2}):(\d{2})]/g
 
 	export default{
 		mixins: [playerMixin],
@@ -258,6 +259,7 @@
 				this.songReady = true
 				this.canLyricPlay = true
 				this.savePlayHistory(this.currentSong)
+				//能播放的才保存记录
 				if(this.currentLyric){
 					this.currentLyric.seek(this.currentTime * 1000)
 				}
@@ -325,10 +327,15 @@
 			getLyric(){
 				this.currentSong.getLyric().then((lyric)=>{
 					this.currentLyric = new Lyric(lyric,this.handleLyric)
-					this.isPureMusic = !this.currentLyric.lines.length
-					if(this.playing && this.canLyricPlay){
-                        this.currentLyric.seek(this.currentTime * 1000)
-					}
+					this.isPureMusic = !this.currentLyric.lines.length || !this.currentLyric
+					if(this.isPureMusic){
+						this.pureMusicLyric = this.currentLyric.lrc.replace(timeExp, '').trim()
+						this.playingLyric = this.pureMusicLyric 
+					}else{
+						if(this.playing && this.canLyricPlay){
+	                        this.currentLyric.seek(this.currentTime * 1000)
+						}
+					}					
 				}).catch(()=>{
 					this.currentLyric = null
 					this.playingLyric = ''
@@ -494,10 +501,11 @@
 				}
 				this.songReady = false
 				this.canLyricPlay = false
+				this.currentTime = 0
 				if(this.currentLyric){
 					this.currentLyric.stop()
 					this.currentLyric = null
-					this.currentTime = 0
+					// this.currentTime = 0
 					this.playingLyric = ''
 					this.currentLineNum = 0
 				}
@@ -524,6 +532,14 @@
 		        		this.syncWrapperTransform('miniWrapper', 'miniImage')
 		        	}
 		        }
+			},
+			fullScreen(newVal){
+				if(newVal){
+					setTimeout(()=>{
+						this.$refs.lyricList.refresh()
+			            this.$refs.progressBar.setProgressOffset(this.percent)
+					},20)
+				}
 			}
 		},
 		created() {

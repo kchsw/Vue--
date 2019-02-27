@@ -80,8 +80,8 @@
 						    </el-table-column>
 						</el-table>
 						<div class='total'>
-							<strong>总计: </strong> <span class="total-span">{{totalCount1}} 件</span>&nbsp;&nbsp;
-							<span class="o-price total-span">{{totalMoney2}} 元</span>
+							<strong>总计: </strong> <span class="total-span">{{totalCount}} 件</span>&nbsp;&nbsp;
+							<span class="o-price total-span">{{totalMoney}} 元</span>
 						</div>
 						<div class="btn-row">
 							<el-button type="danger" plain>删除</el-button>
@@ -121,8 +121,8 @@
 						    </el-table-column>
 						</el-table>
 						<div class='total'>
-							<strong>总计:</strong> <span class="total-span">{{totalCount2}} 件</span>&nbsp;&nbsp;
-							<span class="o-price total-span">{{totalMoney2}} 元</span>
+							<strong>总计:</strong> <span class="total-span">{{totalCount}} 件</span>&nbsp;&nbsp;
+							<span class="o-price total-span">{{totalMoney}} 元</span>
 						</div>
 						<div class="btn-row">
 							<el-button type="warning" plain>挂单</el-button>

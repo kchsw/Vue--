@@ -29,6 +29,7 @@ export const playHistory = (state) => {
 		return new Song(song)
 	})
 	//从localStorage存储到读取的过程中song已经不是Song的实例
+	//JSON    对象拷贝的问题
 }
 
 export const favoriteList = (state) => {

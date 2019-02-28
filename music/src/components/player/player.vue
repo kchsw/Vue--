@@ -744,7 +744,7 @@
       z-index: 180
       width: 100%
       height: 60px
-      background: $color-highlight-background
+      background: $color-list-background
       &.mini-enter-active, &.mini-leave-active
         transition: all 0.4s
       &.mini-enter, &.mini-leave-to
@@ -786,6 +786,8 @@
         .icon-play-mini, .icon-pause-mini, .icon-playlist
           font-size: 30px
           color: $color-theme-d
+        .icon-playlist
+          color: $color-theme
         .icon-mini
           font-size: 32px
           position: absolute

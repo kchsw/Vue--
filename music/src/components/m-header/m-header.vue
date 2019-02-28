@@ -1,7 +1,7 @@
 <template>
 	<div class="header">
 		<div class="icon"></div>
-		<h1 class="text">Chicken Music</h1>
+		<h1 class="text"></h1>
 		<router-link
 		  class="mine"
 		  tag="div"
@@ -27,16 +27,17 @@
     height: 44px
     text-align: center
     color: $color-theme
+    background: $color-background-h
     font-size: 0
     .icon
       display: inline-block
       vertical-align: top
       margin-top: 6px
-      width: 30px
-      height: 32px
+      width: 126px
+      height: 35px
       margin-right: 9px
-      bg-image('logo')
-      background-size: 30px 32px
+      bg-image-h('logo')
+      background-size: 126px 35px
     .text
       display: inline-block
       vertical-align: top
@@ -50,6 +51,6 @@
         display: block
         padding: 12px
         font-size: 20px
-        color: $color-theme
+        color: $color-text-h
 
 </style>

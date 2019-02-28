@@ -196,7 +196,7 @@
         padding-left: 20px
         font-size: $font-size-small
         color: $color-text-l
-        background: $color-highlight-background
+        background: $color-list-background
       .list-group-item
         display: flex
         align-items: center
@@ -219,7 +219,7 @@
       padding: 20px 0
       border-radius: 10px
       text-align: center
-      background: $color-background-d
+      background: $color-background-h
       font-family: Helvetica
       .item
         padding: 3px
@@ -227,7 +227,7 @@
         color: $color-text-l
         font-size: $font-size-small
         &.current
-          color: $color-theme
+          color: $color-text-h
     .list-fixed
       position: absolute
       top: 0
@@ -239,7 +239,7 @@
         padding-left: 20px
         font-size: $font-size-small
         color: $color-text-l
-        background: $color-highlight-background
+        background: $color-list-background
     .loading-container
       position: absolute
       width: 100%

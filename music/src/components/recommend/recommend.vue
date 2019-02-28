@@ -19,14 +19,17 @@
     					<li class="item" 
                           v-for="item in discList"
                           @click="selectdisc(item)"
-                        >
-                            <div class="icon">
-                                <img v-lazy="item.imgurl" width="60" height="60">
+                        >   
+                            <div class="content">
+                                <div class="icon">
+                                    <img v-lazy="item.imgurl" width="60" height="60">
+                                </div>
+                                <div class="text">
+                                    <h2 class="name" v-html="item.creator.name"></h2>
+                                    <p class="desc" v-html="item.dissname"></p>
+                                </div>
                             </div>
-                            <div class="text">
-                                <h2 class="name" v-html="item.creator.name"></h2>
-                                <p class="desc" v-html="item.dissname"></p>
-                            </div>
+                            
                         </li>
     				</ul>
     			</div>
@@ -144,23 +147,27 @@
           box-sizing: border-box
           align-items: center
           padding: 0 20px 20px 20px
-          .icon
-            flex: 0 0 60px
-            width: 60px
-            padding-right: 20px
-          .text
+          .content
             display: flex
-            flex-direction: column
-            justify-content: center
-            flex: 1
-            line-height: 20px
-            overflow: hidden
-            font-size: $font-size-medium
-            .name
-              margin-bottom: 10px
-              color: $color-text
-            .desc
-              color: $color-text-d
+            width: 100%
+            background: $color-list-background 
+            .icon
+              flex: 0 0 60px
+              width: 60px
+              padding-right: 20px
+            .text
+              display: flex
+              flex-direction: column
+              justify-content: center
+              flex: 1
+              line-height: 20px
+              overflow: hidden
+              font-size: $font-size-medium
+              .name
+                margin-bottom: 10px
+                color: $color-text
+              .desc
+                color: $color-text-d
       .loading-container
         position: absolute
         width: 100%

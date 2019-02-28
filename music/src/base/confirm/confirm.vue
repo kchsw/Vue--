@@ -80,7 +80,7 @@
       .confirm-content
         width: 270px
         border-radius: 13px
-        background: $color-highlight-background
+        background: $color-list-background
         .text
           padding: 19px 15px
           line-height: 22px

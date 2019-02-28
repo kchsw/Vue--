@@ -173,7 +173,8 @@
             padding: 5px 10px
             margin: 0 20px 10px 0
             border-radius: 6px
-            background: $color-highlight-background
+            background: $color-list-background
+            border: 1px solid $color-highlight-background
             font-size: $font-size-medium
             color: $color-text-d
         .search-history

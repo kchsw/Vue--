@@ -24,11 +24,11 @@
 .no-result
     text-align: center
     .no-result-icon
-      width: 86px
-      height: 90px
+      width: 120px
+      height: 79px
       margin: 0 auto
-      bg-image('no-result')
-      background-size: 86px 90px
+      bg-image-n('no-result')
+      background-size: 120px 79px
     .no-result-text
       margin-top: 30px
       font-size: $font-size-medium

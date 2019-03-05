@@ -225,7 +225,7 @@
 				flex: 1;
 				@include center;
 				.select-wrapper{
-					cursor: pointer;
+					//cursor: pointer;
 					flex: 1;
 					@include center;
 					&:first-child{

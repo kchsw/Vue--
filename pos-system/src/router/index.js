@@ -13,9 +13,9 @@ export default new Router({
       component: Pos
     },
     {
-      path: '/hello',
-      name: 'HelloWorld',
-      component: HelloWorld
+      // path: '/hello',
+      // name: 'HelloWorld',
+      // component: HelloWorld
     }
   ]
 })

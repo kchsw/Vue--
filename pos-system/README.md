@@ -1,6 +1,7 @@
 # pos-system
 
-> A Vue.js project
+> 用Element UI快速搭建的POS收银页面，实现了简单的点单结账功能
+
 
 ## Build Setup
 

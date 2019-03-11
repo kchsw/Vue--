@@ -28,13 +28,13 @@ export const playHistory = (state) => {
 	return state.playHistory.map((song)=>{
 		return new Song(song)
 	})
-	//从localStorage存储到读取的过程中song已经不是Song的实例
-	//JSON    对象拷贝的问题
+	//从localStorage存储到读取的过程中
+	//JSON 对象拷贝的问题
 }
 
 export const favoriteList = (state) => {
 	return state.favoriteList.map((song)=>{
 		return new Song(song)
 	})
-	//从localStorage存储到读取的过程中song已经不是Song的实例
+	//从localStorage存储到读取的过程
 }

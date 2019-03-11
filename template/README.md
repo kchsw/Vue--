@@ -1,6 +1,6 @@
 # template
 
-> A Vue.js project
+> 开发模板
 
 ## Build Setup
 

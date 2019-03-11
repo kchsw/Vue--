@@ -1,6 +1,6 @@
 # note-app
 
-> A Vue.js project
+>一个简单的笔记应用，可以保存收藏删除笔记
 
 ## Build Setup
 

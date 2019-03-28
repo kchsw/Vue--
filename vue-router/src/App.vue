@@ -13,7 +13,7 @@
       <router-link to='/'>首页</router-link> |
       <router-link to='/params/001/Have a nice day!'>Params</router-link> |
       <router-link to='/hi'>Hi</router-link> |
-      <router-link :to="{name:'HI/hi1',params:{username:'kchsw',id:'001'}}">Hi页面1</router-link> |
+      <router-link :to="{name:'HI/hi1',params:{username:'kchsw',id:'001'}}">Hi页面1</router-link> | <!-- 点击 <router-link :to="..."> 等同于调用 router.push(...)。 -->
       <router-link to='/hi/hi2'>Hi页面2</router-link> |
       <router-link to='/goHome'>redirect重定向</router-link> |
       <router-link to='/error'>错误页面</router-link> 

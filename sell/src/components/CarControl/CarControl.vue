@@ -40,12 +40,12 @@ export default{
 				return
 			}
 			if(!this.food.count){
-				Vue.set(this.food, 'count', 1);
-				// this.$set(this.food, 'count', 1)
+				Vue.set(this.food, 'count', 1) //全句注册
+				// this.$set(this.food, 'count', 1) //局部注册
 			}else{
 				this.food.count++;
 			}
-			this.$emit('add',event.target)
+			this.$emit('add', event.target)
 		},
 		decreaseCart(event){
 			if(!event._constructed){

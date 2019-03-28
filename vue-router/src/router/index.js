@@ -19,7 +19,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
+      name: 'HelloWorld',//路由命名
       components: {
       	default:HelloWorld,
       	Left:Left,
@@ -60,7 +60,7 @@ export default new Router({
     }
   ]
 })
-
+// Vue Router 的导航方法 (push、 replace、 go) 
 // routes: [
 //     { path: '/user/:id', component: User,
 //       children: [

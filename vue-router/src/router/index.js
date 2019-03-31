@@ -40,7 +40,7 @@ export default new Router({
             {path:'hi2',name: 'HI/hi2',component:Hi2}
     	]
     },{
-    	path: '/params/:newsId(\\d+)/:newsTitle',
+    	path: '/params/:newsId(\\d+)/:newsTitle', //(\\d+)正则只能传数字
     	name: 'Params',
     	component: Params,
     	beforeEnter:(to,from,next)=>{

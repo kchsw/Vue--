@@ -13,3 +13,27 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+const HAS_LOGINED = true
+const setTitle = (title) => window.title = 'title' || 'admin'
+//全局守卫
+router.beforeEach((to, from, next) => {
+	to.meta && to.meta.title && setTitle(title)
+	if(to.name !== 'login'){
+		if(HAS_LOGINED){
+			next()
+		}else{
+			next({ name: 'login' })
+		}
+	}else{
+		if(HAS_LOGINED){
+			next({ name: 'home' })
+		}else{
+			next()
+		}
+	}
+})
+
+router.afterEach((to, from) => {
+	//HAS_LOADING = false
+})

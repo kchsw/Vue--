@@ -1,9 +1,23 @@
 const bodyparser = require('body-parser')
 const userpoor = require('./src/api/userpoor.js')
+const path = require('path')
+function resolve (dir) {
+    return path.join(__dirname, dir)
+}
 let Token
 
+// const BASE_URL = process.env.NODE_ENV === 
+
 module.exports = {
+  // baseUrl: 
+
+  chainWebpack: config => {
+    config.resolve.alias
+      .set('@',resolve('src'))
+  },
+  productionSourceMap: false,
   devServer: {
+    // proxy: '',
     before(app){
       
       app.use(bodyparser.urlencoded({extende:true}))

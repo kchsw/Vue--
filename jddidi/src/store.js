@@ -63,7 +63,7 @@ let store =  new Vuex.Store({
 })
 
 //监听每次调用mutations的时候,都会进这个方法，本地持久化处理
-store.subscribe((mutations,state)=>{
+store.subscribe((mutations, state)=>{
   localStorage.setItem('CARTARRAY',JSON.stringify(state.cartArry))
 })
 export default store

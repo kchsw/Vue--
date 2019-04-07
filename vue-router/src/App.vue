@@ -25,6 +25,11 @@
 <script>
 export default {
   name: 'App',
+  data(){
+    return {
+      routerTransition: ''
+    }
+  },
   methods:{
     goBack(){
       this.$router.go(-1);
@@ -34,6 +39,12 @@ export default {
     },
     goHome(){
       this.$router.push('/')
+    }，
+    watch: {
+    //监听路由的变化
+    '$route'(to){
+      //to.query && to.query.routerTransition && this.routerTransition = to.query.routerTransition
+      //动态改变transition动画
     }
   }
 }

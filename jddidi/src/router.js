@@ -9,6 +9,7 @@ import Car from './components/Car'
 import Mine from './components/Mine'
 import Search from './components/Search'
 import Class from './components/Class'
+import Test from './components/Test'
 
 Vue.use(Router)
 
@@ -73,6 +74,11 @@ export default new Router({
           }
         },
       ]
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: Test
     }
   ]
 })

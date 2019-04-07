@@ -24,7 +24,8 @@ export default new Router({
       	default:HelloWorld,
       	Left:Left,
       	Right:Right
-      }
+      }.
+      meta: { title: 'Hello' }
       // 根目录下alias不起作用
     },{
       path: '/goHome',
@@ -43,13 +44,25 @@ export default new Router({
     	path: '/params/:newsId(\\d+)/:newsTitle', //(\\d+)正则只能传数字
     	name: 'Params',
     	component: Params,
+      //路由独享守卫
     	beforeEnter:(to,from,next)=>{
-    		console.log(to);
-    		console.log(to);
+    		if(from.name === 'HelloWorld'){
+          alert('这是从首页来的')
+        }else{
+          alert('这是从其他页面来的')
+        }
     		next();
     		// next(false);不跳转
     		// next({path:'/'});跳转根目录
-    	}
+    	},
+      // props: true 通过组件props传值 props: {newsId, newsTitle}
+      // props: {
+      //   newsId: 0
+      // } 
+      // props: route => ({
+      //   newsId : route.query.newsId  /params?newsId=0
+      // })
+      //props 传参
     },{
     	path:'/goParams/:newsId(\\d+)/:newsTitle',
     	redirect:'/params/:newsId(\\d+)/:newsTitle',
@@ -79,3 +92,12 @@ export default new Router({
 //       ]
 //     }
 //   ]
+//路由跳转激活顺序
+// 1.失活组件 beforeRouteLeave
+// 2.全局前置守卫beforeEach
+// 3.路由独享守卫 beforeEnter
+// 4.激活组件 beforeRouteEnter
+// 5.全局解析守卫 beforeResolve
+// 6.全局后置守卫 afterEach
+
+

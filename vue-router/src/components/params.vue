@@ -10,6 +10,16 @@
 
 <script>
 	export default{
+		props: {
+			newsId: {
+				type: Number,
+				default: 0
+			},
+			newsTitle: {
+				type: String,
+				default: '标题'
+			}
+		},
 		data(){
 			return{
 				msg:'params page'

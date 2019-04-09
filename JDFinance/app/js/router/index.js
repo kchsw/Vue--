@@ -5,7 +5,7 @@ import Money from "../money/index"
 import Ious from "../ious/index"
 import Raise from "../raise/index"
 import Mine from "../mine/index"
-
+import Download from "../special/download"
 Vue.use(Router)
 
 export default new Router({
@@ -34,7 +34,11 @@ export default new Router({
             path: '/mine',
             name: 'mine',
             component: Mine
-        },
+        },{
+            path: '/download',
+            name: 'download',
+            component: Download
+        }
 
     ]
 })

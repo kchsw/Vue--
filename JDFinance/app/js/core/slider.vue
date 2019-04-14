@@ -44,4 +44,3 @@ export default {
 <style lang="css">
  @import "~swiper/dist/css/swiper.css";
 </style>
-	

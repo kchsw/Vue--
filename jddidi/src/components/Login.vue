@@ -3,12 +3,12 @@
 		
 		<div class="register-box">
 			<cube-form
-		  :model="model"
-		  :schema="schema"
-		  @submit="submitHandler"
-		>
-		</cube-form>
-		<cube-button :primary="true" @click="click">拦截测试</cube-button>
+			  :model="model"
+			  :schema="schema"
+			  @submit="submitHandler"
+			>
+			</cube-form>
+			<cube-button :primary="true" @click="click">拦截测试</cube-button>
 		</div>
 	</div>
 </template>
@@ -90,13 +90,12 @@ export default {
 				if(result.code == 0){
 					this.$store.commit('SET_TOKEN', result.token)
 					sessionStorage.setItem('TOKEN', result.token)
-					//判断路由是否带单数，登陆后跳转
+					//判断路由是否带参数，登陆后跳转
 					if(this.$route.query.redirect){
 						this.$router.replace({ path:this.$route.query.redirect})
 					}else{
 						this.$router.replace({ path:'/botnav'})
 					}
-					console.log('111')
 				}else{
 					
 				}
